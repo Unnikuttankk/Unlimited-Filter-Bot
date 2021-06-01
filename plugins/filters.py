@@ -26,7 +26,7 @@ from plugins.helpers import parser,split_quotes
 
 
 
-@Client.on_message(filters.command(Config.ADD_FILTER_CMD))
+@Client.on_message(filters.command(["filter"]))
 async def addfilter(client, message):
       
     userid = message.from_user.id
@@ -232,7 +232,7 @@ async def get_all(client, message):
         parse_mode="md"
     )
         
-@Client.on_message(filters.command(Config.DELETE_FILTER_CMD))
+@Client.on_message(filters.command(["rem"]))
 async def deletefilter(client, message):
     userid = message.from_user.id
     chat_type = message.chat.type
@@ -277,7 +277,7 @@ async def deletefilter(client, message):
     await delete_filter(message, query, grp_id)
         
 
-@Client.on_message(filters.command(Config.DELETE_ALL_CMD))
+@Client.on_message(filters.command(["remall"]))
 async def delallconfirm(client, message):
     userid = message.from_user.id
     chat_type = message.chat.type
