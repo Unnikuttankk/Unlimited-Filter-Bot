@@ -12,7 +12,7 @@ from database.connections_mdb import add_connection, all_connections, if_active,
 
 
 
-@Client.on_message((filters.private | filters.group) & filters.command(["filter"]))
+@Client.on_message((filters.private | filters.group) & filters.command(["set"]))
 async def addconnection(client,message):
     userid = message.from_user.id
     chat_type = message.chat.type
