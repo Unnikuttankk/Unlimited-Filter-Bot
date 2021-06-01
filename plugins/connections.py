@@ -82,7 +82,7 @@ async def addconnection(client,message):
         return
 
 
-@Client.on_message((filters.private | filters.group) & filters.command(["rem"]))
+@Client.on_message((filters.private | filters.group) & filters.command(["unset"]))
 async def deleteconnection(client,message):
     userid = message.from_user.id
     chat_type = message.chat.type
