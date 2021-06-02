@@ -6,9 +6,9 @@ if bool(os.environ.get("WEBHOOK", False)):
 else:
     from config import Config
  
-myclient = pymongo.MongoClient(Config.DATABASE_URI)
-mydb = myclient[Config.DATABASE_NAME]
-mycol = mydb['USERS']
+myclients = pymongo.MongoClient(Config.DATABASE_URI)
+mydbs = myclients[Config.DATABASE_NAME]
+mycols = mydbs['USERS']
 
 
 
@@ -20,21 +20,21 @@ async def add_user(id, username, name, dcid):
         'dc_id' : dcid
     }
     try:
-        mycol.update_one({'_id': id},  {"$set": data}, upsert=True)
+        mycols.update_one({'_id': id},  {"$set": data}, upsert=True)
     except:
         pass
 
 
 async def all_users():
-    count = mycol.count()
+    count = mycols.count()
     return count
 
 
 async def find_user(id):
-    query = mycol.find( {"_id":id})
+    querye = mycols.find( {"_id":id})
 
     try:
-        for file in query:
+        for file in querye:
             name = file['name']
             username = file['username']
             dc_id = file['dc_id']
