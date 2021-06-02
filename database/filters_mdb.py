@@ -7,14 +7,14 @@ if bool(os.environ.get("WEBHOOK", False)):
 else:
     from config import Config
  
-myclient = pymongo.MongoClient(Config.DATABASE_URI)
-mydb = myclient[Config.DATABASE_NAME]
+myclients = pymongo.MongoClient(Config.DATABASE_URI)
+mydbs = myclients[Config.DATABASE_NAME]
 
 
 
 async def add_filter(grp_id, text, reply_text, btn, file, alert):
-    mycol = mydb[str(grp_id)]
-    # mycol.create_index([('text', 'text')])
+    mycols = mydbs[str(grp_id)]
+    # mycols.create_index([('text', 'text')])
 
     data = {
         'text':str(text),
@@ -25,16 +25,16 @@ async def add_filter(grp_id, text, reply_text, btn, file, alert):
     }
 
     try:
-        mycol.update_one({'text': str(text)},  {"$set": data}, upsert=True)
+        mycols.update_one({'text': str(text)},  {"$set": data}, upsert=True)
     except:
         print('Couldnt save, check your db')
              
      
 async def find_filter(group_id, name):
-    mycol = mydb[str(group_id)]
+    mycols = mydbs[str(group_id)]
     
-    query = mycol.find( {"text":name})
-    # query = mycol.find( { "$text": {"$search": name}})
+    querye = mycols.find( {"text":name})
+    # querye = mycols.find( { "$text": {"$search": name}})
     try:
         for file in query:
             reply_text = file['reply']
@@ -49,13 +49,13 @@ async def find_filter(group_id, name):
         return None, None, None, None
 
 
-async def get_filters(group_id):
-    mycol = mydb[str(group_id)]
+async def get_filtersall(group_id):
+    mycols = mydbs[str(group_id)]
 
     texts = []
-    query = mycol.find()
+    querye = mycols.find()
     try:
-        for file in query:
+        for file in querye:
             text = file['text']
             texts.append(text)
     except:
@@ -64,12 +64,12 @@ async def get_filters(group_id):
 
 
 async def delete_filter(message, text, group_id):
-    mycol = mydb[str(group_id)]
+    mycols = mydbs[str(group_id)]
     
-    myquery = {'text':text }
-    query = mycol.count_documents(myquery)
-    if query == 1:
-        mycol.delete_one(myquery)
+    myquerye = {'text':text }
+    querye = mycols.count_documents(myquerye)
+    if querye == 1:
+        mycols.delete_one(myquerye)
         await message.reply_text(
             f"'`{text}`'  deleted. I'll not respond to that filter anymore.",
             quote=True,
@@ -80,13 +80,13 @@ async def delete_filter(message, text, group_id):
 
 
 async def del_all(message, group_id, title):
-    if str(group_id) not in mydb.list_collection_names():
+    if str(group_id) not in mydbs.list_collection_names():
         await message.edit_text(f"Nothing to remove in {title}!")
         return
         
-    mycol = mydb[str(group_id)]
+    mycols = mydbs[str(group_id)]
     try:
-        mycol.drop()
+        mycols.drop()
         await message.edit_text(f"All filters from {title} has been removed")
     except:
         await message.edit_text(f"Couldn't remove all filters from group!")
@@ -94,9 +94,9 @@ async def del_all(message, group_id, title):
 
 
 async def count_filters(group_id):
-    mycol = mydb[str(group_id)]
+    mycols = mydbs[str(group_id)]
 
-    count = mycol.count()
+    count = mycols.count()
     if count == 0:
         return False
     else:
@@ -104,7 +104,7 @@ async def count_filters(group_id):
 
 
 async def filter_stats():
-    collections = mydb.list_collection_names()
+    collections = mydbs.list_collection_names()
 
     if "CONNECTION" in collections:
         collections.remove("CONNECTION")
@@ -113,8 +113,8 @@ async def filter_stats():
 
     totalcount = 0
     for collection in collections:
-        mycol = mydb[collection]
-        count = mycol.count()
+        mycols = mydbs[collection]
+        count = mycols.count()
         totalcount = totalcount + count
 
     totalcollections = len(collections)
