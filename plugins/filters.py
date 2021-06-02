@@ -14,7 +14,7 @@ else:
 from database.filters_mdb import(
    add_filter,
    find_filter,
-   get_filters,
+   get_filtersall,
    delete_filter,
    count_filters
 )
@@ -320,7 +320,7 @@ async def give_filter(client,message):
     group_id = message.chat.id
     name = message.text
 
-    keywords = await get_filters(group_id)
+    keywords = await get_filtersall(group_id)
     for keyword in keywords:
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
