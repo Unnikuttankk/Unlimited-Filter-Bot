@@ -33,8 +33,8 @@ async def add_filter(grp_id, text, reply_text, btn, file, alert):
 async def find_filter(group_id, name):
     mycols = mydbs[str(group_id)]
     
-    querye = mycols.find( {"text":name})
-    # querye = mycols.find( { "$text": {"$search": name}})
+    query = mycols.find( {"text":name})
+    # query = mycols.find( { "$text": {"$search": name}})
     try:
         for file in query:
             reply_text = file['reply']
@@ -53,9 +53,9 @@ async def get_filtersall(group_id):
     mycols = mydbs[str(group_id)]
 
     texts = []
-    querye = mycols.find()
+    query = mycols.find()
     try:
-        for file in querye:
+        for file in query:
             text = file['text']
             texts.append(text)
     except:
@@ -67,8 +67,8 @@ async def delete_filter(message, text, group_id):
     mycols = mydbs[str(group_id)]
     
     myquerye = {'text':text }
-    querye = mycols.count_documents(myquerye)
-    if querye == 1:
+    query = mycols.count_documents(myquerye)
+    if query == 1:
         mycols.delete_one(myquerye)
         await message.reply_text(
             f"'`{text}`'  deleted. I'll not respond to that filter anymore.",
