@@ -31,10 +31,10 @@ async def all_users():
 
 
 async def find_user(id):
-    querye = mycols.find( {"_id":id})
+    query = mycols.find( {"_id":id})
 
     try:
-        for file in querye:
+        for file in query:
             name = file['name']
             username = file['username']
             dc_id = file['dc_id']
