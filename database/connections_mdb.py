@@ -12,13 +12,13 @@ mycols = mydbs['CONNECTION']
 
 
 async def add_connection(group_id, user_id):
-    querye = mycols.find_one(
+    query = mycols.find_one(
         { "_id": user_id },
         { "_id": 0, "active_group": 0 }
     )
-    if querye is not None:
+    if query is not None:
         group_ids = []
-        for x in querye["group_details"]:
+        for x in query["group_details"]:
             group_ids.append(x["group_id"])
 
         if group_id in group_ids:
@@ -62,7 +62,7 @@ async def active_connection(user_id):
         { "_id": 0, "group_details": 0 }
     )
     if querye:
-        group_id = querye['active_group']
+        group_id = query['active_group']
         if group_id != None:
             return int(group_id)
         else:
@@ -72,13 +72,13 @@ async def active_connection(user_id):
 
 
 async def all_connections(user_id):
-    querye = mycols.find_one(
+    query = mycols.find_one(
         { "_id": user_id },
         { "_id": 0, "active_group": 0 }
     )
-    if querye is not None:
+    if query is not None:
         group_ids = []
-        for x in querye["group_details"]:
+        for x in query["group_details"]:
             group_ids.append(x["group_id"])
         return group_ids
     else:
@@ -86,12 +86,12 @@ async def all_connections(user_id):
 
 
 async def if_active(user_id, group_id):
-    querye = mycols.find_one(
+    query = mycols.find_one(
         { "_id": user_id },
         { "_id": 0, "group_details": 0 }
     )
-    if querye is not None:
-        if querye['active_group'] == group_id:
+    if query is not None:
+        if query['active_group'] == group_id:
             return True
         else:
             return False
@@ -131,13 +131,13 @@ async def delete_connection(user_id, group_id):
         if update.modified_count == 0:
             return False
         else:
-            querye = mycols.find_one(
+            query = mycols.find_one(
                 { "_id": user_id },
                 { "_id": 0 }
             )
-            if len(querye["group_details"]) >= 1:
-                if querye['active_group'] == group_id:
-                    prvs_group_id = querye["group_details"][len(querye["group_details"]) - 1]["group_id"]
+            if len(query["group_details"]) >= 1:
+                if query['active_group'] == group_id:
+                    prvs_group_id = query["group_details"][len(query["group_details"]) - 1]["group_id"]
 
                     mycols.update_one(
                         {'_id': user_id},
