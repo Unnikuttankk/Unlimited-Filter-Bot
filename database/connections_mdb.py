@@ -57,7 +57,7 @@ async def add_connection(group_id, user_id):
         
 async def active_connection(user_id):
 
-    querye = mycols.find_one(
+    query = mycols.find_one(
         { "_id": user_id },
         { "_id": 0, "group_details": 0 }
     )
