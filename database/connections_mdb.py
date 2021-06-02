@@ -61,7 +61,7 @@ async def active_connection(user_id):
         { "_id": user_id },
         { "_id": 0, "group_details": 0 }
     )
-    if querye:
+    if query:
         group_id = query['active_group']
         if group_id != None:
             return int(group_id)
