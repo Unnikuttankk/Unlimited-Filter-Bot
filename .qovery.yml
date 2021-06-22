@@ -1,0 +1,15 @@
+---
+application:
+  name: "unlimited-filter-bot"
+  project: "filter"
+  organization: "QoveryCommunity"
+databases:
+- type: "MONGODB"
+  name: "filterbot"
+  version: "4.4"
+routers:
+- name: "main-unlimited-filter-bot"
+  routes:
+  - application_name: "unlimited-filter-bot"
+    paths:
+    - "/*"
